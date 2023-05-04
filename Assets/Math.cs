@@ -22,16 +22,17 @@ public static class Math
         return Mathf.Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
     }
 
-    public static Vector4 getColumnFromMatrix(Matrix4x4 mat, int i)
+    public static Vector3 getColumnFromMatrix(Matrix4x4 mat, int i)
     {
-        return new Vector4(mat[0,i], mat[1,i], mat[2,i], 0);
+        return new Vector3(mat[0,i], mat[1,i], mat[2,i]);
     }
 
-    public static Matrix4x4 setPositionInMatrix(Matrix4x4 mat, Vector4 vec)
+    public static Matrix4x4 setColumnInMatrix(Matrix4x4 mat, Vector3 vec, int i)
     {
-        mat.m03 = vec.x;
-        mat.m13 = vec.y;
-        mat.m23 = vec.z;
+        mat[0, i] = vec.x;
+        mat[1, i] = vec.y;
+        mat[2, i] = vec.z;
+        
         return mat;
     }
 }
