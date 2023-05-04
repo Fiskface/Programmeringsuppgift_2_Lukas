@@ -17,9 +17,14 @@ public static class Math
             vec1.x * vec2.y - vec1.y * vec2.x);
     }
 
-    public static Vector4 getPositionFromMatrix(Matrix4x4 mat)
+    public static float GetMagnitude(Vector3 vec)
     {
-        return new Vector4(mat.m03, mat.m13, mat.m23, 0);
+        return Mathf.Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+    }
+
+    public static Vector4 getColumnFromMatrix(Matrix4x4 mat, int i)
+    {
+        return new Vector4(mat[0,i], mat[1,i], mat[2,i], 0);
     }
 
     public static Matrix4x4 setPositionInMatrix(Matrix4x4 mat, Vector4 vec)

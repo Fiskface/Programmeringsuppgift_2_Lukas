@@ -21,7 +21,7 @@ public class Example : MonoBehaviour {
 
     [SerializeField, HideInInspector] internal Matrix4x4 A;
     [SerializeField, HideInInspector] internal Matrix4x4 B;
-    [SerializeField, HideInInspector] internal Matrix4x4 C;
+    [SerializeField, HideInInspector] internal Matrix4x4 C = Matrix4x4.identity;
 
     [NonSerialized] public Vector4 vector0 = new Vector4(0,0,0,1);
     [NonSerialized] public Vector4 vectorA = new Vector4(1,0,0,1);
@@ -40,11 +40,22 @@ public class Example : MonoBehaviour {
 
     void Update()
     {
-        Vector4 posInter = (1.0f - Time) * Math.getPositionFromMatrix(A) + Time * Math.getPositionFromMatrix(B);
-        
+        Vector4 posInter = (1.0f - Time) * Math.getColumnFromMatrix(A, 3) + Time * Math.getColumnFromMatrix(B, 3);
         if(ShowPosition)
             C = Math.setPositionInMatrix(C, posInter);
+
         
+        float ScaleAx = Math.GetMagnitude(Math.getColumnFromMatrix(A, 0));
+        float ScaleAy = Math.GetMagnitude(Math.getColumnFromMatrix(A, 1));
+        float ScaleAz = Math.GetMagnitude(Math.getColumnFromMatrix(A, 2));
+        
+        float ScaleBx = Math.GetMagnitude(Math.getColumnFromMatrix(B, 0));
+        float ScaleBy = Math.GetMagnitude(Math.getColumnFromMatrix(B, 1));
+        float ScaleBz = Math.GetMagnitude(Math.getColumnFromMatrix(B, 2));
+        
+        C.m00 = (1.0f - Time) * ScaleAx + Time * ScaleBx;
+        C.m11 = (1.0f - Time) * ScaleAy + Time * ScaleBy;
+        C.m22 = (1.0f - Time) * ScaleAz + Time * ScaleBz;
 
         using (vectors.Begin()) {
             vectors.Draw(CalculatePos(vector0), CalculatePos(vectorA), Color.red);
@@ -65,7 +76,7 @@ public class Example : MonoBehaviour {
 
         Vector4 CalculatePos(Vector4 vec)
         {
-            return (vec + Math.getPositionFromMatrix(C));
+            return C*(vec);
         }
     }
 }
@@ -81,7 +92,13 @@ public class DemoEditor : Editor
         EditorGUI.BeginChangeCheck();
         
         var aPos = new Vector3(demo.A.m03, demo.A.m13, demo.A.m23);
-        var newTarget = Handles.PositionHandle(aPos, demo.transform.rotation);
+        var newTarget = aPos;
+
+        if (Tools.current == Tool.Move)
+        {
+            newTarget = Handles.PositionHandle(aPos, demo.transform.rotation);
+        }
+        else 
 
         if (EditorGUI.EndChangeCheck())
         {
