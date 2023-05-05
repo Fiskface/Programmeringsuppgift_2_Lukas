@@ -326,7 +326,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108076608}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 19.81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -349,13 +349,30 @@ MonoBehaviour:
   ShowTranslation: 1
   ShowScale: 1
   ShowRotation: 1
-  InputWithHandles: 0
-  Time: 0
+  InputWithHandles: 1
+  Time: 0.567
   A:
+    e00: 0
+    e01: 0
+    e02: 1
+    e03: -1.3669753
+    e10: 1
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 1
+    e22: 0
+    e23: -1.3051745
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  B:
     e00: 1
     e01: 0
     e02: 0
-    e03: 0
+    e03: 3.3073149
     e10: 0
     e11: 1
     e12: 0
@@ -363,41 +380,24 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 1
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  B:
-    e00: 0
-    e01: 0
-    e02: 1
-    e03: 1
-    e10: 1
-    e11: 0
-    e12: 0
-    e13: 1
-    e20: 0
-    e21: 1
-    e22: 0
-    e23: 1
+    e23: 6.3490047
     e30: 0
     e31: 0
     e32: 0
     e33: 1
   C:
-    e00: -0.18518528
-    e01: 0.22970538
-    e02: 0.9554799
-    e03: 0
-    e10: 0.9554799
-    e11: -0.18518528
-    e12: 0.22970538
+    e00: 0.744141
+    e01: -0.32678044
+    e02: 0.58263946
+    e03: 1.2833471
+    e10: 0.58263946
+    e11: 0.744141
+    e12: -0.32678044
     e13: 0
-    e20: 0.22970538
-    e21: 0.9554799
-    e22: -0.18518528
-    e23: 0
+    e20: -0.32678044
+    e21: 0.58263946
+    e22: 0.744141
+    e23: 3.0347447
     e30: 0
     e31: 0
     e32: 0
