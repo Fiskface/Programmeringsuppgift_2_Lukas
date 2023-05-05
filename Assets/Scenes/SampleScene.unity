@@ -123,51 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &88370608
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 88370610}
-  - component: {fileID: 88370609}
-  m_Layer: 0
-  m_Name: Scene Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &88370609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 88370608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 600cb9c76c07d1d4689cf584c0ac318d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &88370610
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 88370608}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1108076609}
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +313,7 @@ GameObject:
   - component: {fileID: 1108076611}
   - component: {fileID: 1108076610}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -371,13 +326,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108076608}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 19.81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 88370610}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1108076610
 MonoBehaviour:
@@ -394,6 +349,7 @@ MonoBehaviour:
   ShowTranslation: 1
   ShowScale: 1
   ShowRotation: 1
+  InputWithHandles: 0
   Time: 0
   A:
     e00: 1
@@ -413,43 +369,41 @@ MonoBehaviour:
     e32: 0
     e33: 1
   B:
-    e00: 2
+    e00: 0
     e01: 0
-    e02: 0
+    e02: 1
     e03: 1
-    e10: 0
-    e11: 2
+    e10: 1
+    e11: 0
     e12: 0
-    e13: 0
+    e13: 1
     e20: 0
-    e21: 0
-    e22: 2
+    e21: 1
+    e22: 0
     e23: 1
     e30: 0
     e31: 0
     e32: 0
     e33: 1
   C:
-    e00: 1
-    e01: 0
-    e02: 0
+    e00: -0.18518528
+    e01: 0.22970538
+    e02: 0.9554799
     e03: 0
-    e10: 0
-    e11: 1
-    e12: 0
+    e10: 0.9554799
+    e11: -0.18518528
+    e12: 0.22970538
     e13: 0
-    e20: 0
-    e21: 0
-    e22: 1
+    e20: 0.22970538
+    e21: 0.9554799
+    e22: -0.18518528
     e23: 0
     e30: 0
     e31: 0
     e32: 0
     e33: 1
-  aRotation: {x: 0.00880202, y: 0.008649721, z: 0.008649721, w: 0.9998864}
-  bRotation: {x: 0.00880202, y: 0.008649721, z: 0.008649721, w: 0.9998864}
-  aScale: {x: 0.9, y: 0.87575454, z: 0.9755158}
-  bScale: {x: 0, y: 0, z: 0}
+  aRotation: {x: 0, y: 0, z: 0, w: 1}
+  bRotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!114 &1108076611
 MonoBehaviour:
   m_ObjectHideFlags: 0
