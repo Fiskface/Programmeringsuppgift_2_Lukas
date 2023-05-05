@@ -22,6 +22,14 @@ public static class Math
         return Mathf.Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
     }
 
+    public static Vector3 Normalize(Vector3 vec)
+    {
+        if (GetMagnitude(vec) == 0)
+            return Vector3.zero;
+        
+        return (1 / GetMagnitude(vec)) * vec;
+    }
+
     public static Vector3 getColumnFromMatrix(Matrix4x4 mat, int i)
     {
         return new Vector3(mat[0,i], mat[1,i], mat[2,i]);
