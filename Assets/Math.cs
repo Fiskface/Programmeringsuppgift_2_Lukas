@@ -84,7 +84,10 @@ public static class Math
         qA.w = -qA.w;
 
         
+        //TODO:
         //Kolla så cosinus inte blir för nära 0, alltså 1; Nånstans i kapitel 8 för interpolering av quat
+        //Glöm inte att rotationshandles också måste fixas!
+        //Kom ihåg att försöka fixa C matrisen i inspectorn. 
         
         //Makes sure it takes shortest path
         if (Quaternion.Dot(qA, qB) < 0)
