@@ -176,6 +176,20 @@ public class Example : MonoBehaviour {
             return new Vector3(temp.x, temp.y, temp.z);
         }
 
+        
+        Debug.Log(C);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         Quaternion weeewooo(Matrix4x4 matrix1, Matrix4x4 matrix2)
         {
             var planeNormal = Vector3.zero;
@@ -354,6 +368,19 @@ public class Example : MonoBehaviour {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public Quaternion QuaternionFromMatrix(Matrix4x4 m){
         Quaternion q = new Quaternion();
         q.w = Mathf.Sqrt( Mathf.Max( 0, 1 + m[0,0] + m[1,1] + m[2,2] ) ) / 2; 
@@ -511,6 +538,7 @@ public class DemoEditor : Editor
             }
             EditorGUILayout.EndHorizontal();
         }
+        Debug.Log($"res{resultC}");
         
         EditorGUILayout.EndVertical();
         EditorGUILayout.EndHorizontal();
@@ -520,6 +548,7 @@ public class DemoEditor : Editor
             Undo.RecordObject(demo, "Change matrix");
             demo.A = resultA;
             demo.B = resultB;
+            demo.C = resultC;
 
             EditorUtility.SetDirty(demo);
         }
