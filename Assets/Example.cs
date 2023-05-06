@@ -252,8 +252,7 @@ public class DemoEditor : Editor
             }
             EditorGUILayout.EndHorizontal();
         }
-        Debug.Log($"{resultC}");
-        
+
         EditorGUILayout.EndVertical();
         EditorGUILayout.EndHorizontal();
         

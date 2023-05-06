@@ -47,6 +47,11 @@ public static class Math
         return mat;
     }
 
+    public static float QuatDot(Quaternion q1, Quaternion q2)
+    {
+        return (q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w);
+    }
+
     public static Matrix4x4 RotationMatrixFromQuaternion(Quaternion q)
     {
         var x = q.x;
@@ -81,6 +86,17 @@ public static class Math
     {
         Quaternion qA = QuatFromMatrix(A);
         Quaternion qB = QuatFromMatrix(B);
+        
+        Debug.Log(qA);
+        Debug.Log(qB);
+
+        
+        //If both are rotated, but rotated exactly the same, it gives a weird value when this function is used, now it doesn't. 
+        if (qA == qB)
+        {
+            return RotationMatrixFromQuaternion(qA);
+        }
+        
         qA.w = -qA.w;
 
         
@@ -90,10 +106,16 @@ public static class Math
         //Kom ihåg att försöka fixa C matrisen i inspectorn. 
         
         //Makes sure it takes shortest path
-        if (Quaternion.Dot(qA, qB) < 0)
+        float dot = QuatDot(qA, qB);
+        if (dot < 0)
             qB = new Quaternion(-qB.x, -qB.y, -qB.z, -qB.w);
         
-        
+       
+
+        if (dot < -0.9999)
+            return Matrix4x4.identity;
+
+
         Quaternion qC = qB * qA;
         
 
