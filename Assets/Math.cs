@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 public static class Math
 {
+    //Lämnar här trots inte använt, behövs för omexamination 1 och potentiellt, men kanske inte, för uppgift 3
     public static float DotProduct(Vector3 vec1, Vector3 vec2)
     {
         return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z + vec2.z;
@@ -82,6 +83,8 @@ public static class Math
         Quaternion qB = QuatFromMatrix(B);
         qA.w = -qA.w;
 
+        
+        //Kolla så cosinus inte blir för nära 0, alltså 1; Nånstans i kapitel 8 för interpolering av quat
         
         //Makes sure it takes shortest path
         if (Quaternion.Dot(qA, qB) < 0)
