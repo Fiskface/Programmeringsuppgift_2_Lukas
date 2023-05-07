@@ -50,6 +50,14 @@ public static class Math
         
         return mat;
     }
+    
+    //Calculates determinant of the matrix, which in this case is the volume of the cube since we're working with cubes
+    public static float determinant(Matrix4x4 m)
+    {
+        return m[0, 0] * (m[1, 1] * m[2, 2] - m[1, 2] * m[2, 1])
+            +m[0, 1] * (m[1, 2] * m[2, 0] - m[1, 0] * m[2, 2])
+            +m[0, 2] * (m[1, 0] * m[2, 1] - m[1, 1] * m[2, 0]);
+    }
 
     //Returns the dotproduct of 2 quaternions
     public static float QuatDot(Quaternion q1, Quaternion q2)

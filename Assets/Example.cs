@@ -15,6 +15,7 @@ public class Example : MonoBehaviour
     public bool ShowRotation = true;
 
     [Range(0, 1)] public float Time = 0.0f;
+    public float determinantOfC;
 
     [SerializeField, HideInInspector] internal Matrix4x4 A;
     [SerializeField, HideInInspector] internal Matrix4x4 B;
@@ -70,6 +71,8 @@ public class Example : MonoBehaviour
         }
         
         C = CTranslate * CRotate * CScale;
+
+        determinantOfC = Math.determinant(C);
 
         //Gets rid of incredibly small numbers when Time is 1 to make it easier to read.
         if (Time == 1)
