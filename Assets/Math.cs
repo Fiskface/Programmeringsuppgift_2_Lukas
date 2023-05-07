@@ -57,6 +57,7 @@ public static class Math
         return (q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w);
     }
 
+    //Used gamemath figure 8.20 for this
     //Uses a quaternion to get a rotationmatrix
     public static Matrix4x4 RotationMatrixFromQuaternion(Quaternion q)
     {
@@ -72,23 +73,28 @@ public static class Math
         return new Matrix4x4(c1,c2,c3,c4);
     }
 
+    //Used 
     //Takes out a quaternion as representation of the rotation from a matrix.
     public static Quaternion QuatFromMatrix(Matrix4x4 mat)
     {
+        //Takes out vectors from the right columns
         Vector3 x = Normalize(GetColumnFromMatrix(mat, 0));
         Vector3 y = Normalize(GetColumnFromMatrix(mat, 1));
         Vector3 z = Normalize(GetColumnFromMatrix(mat, 2));
+        //Inspiration from 8.7.4
         Quaternion quat = new Quaternion();
-        quat.w = Mathf.Sqrt(Mathf.Max(0, 1 + x.x + y.y + z.z))/2;
         quat.x = Mathf.Sqrt(Mathf.Max(0, 1 + x.x - y.y - z.z))/2;
         quat.y = Mathf.Sqrt(Mathf.Max(0, 1 - x.x + y.y - z.z))/2;
         quat.z = Mathf.Sqrt(Mathf.Max(0, 1 - x.x - y.y + z.z))/2;
+        quat.w = Mathf.Sqrt(Mathf.Max(0, 1 + x.x + y.y + z.z))/2;
+        //Checks if they're positive or negative
         quat.x *= Mathf.Sign(quat.x * (y.z - z.y));
         quat.y *= Mathf.Sign(quat.y * (z.x - x.z));
         quat.z *= Mathf.Sign(quat.z * (y.z - z.y));
         return quat;
     }
 
+    //Information taken from gamemath Chapter 8.5.12
     //With the help of QuatFromMatrix and RotationMatrixFromQuaternion functions
     //this function takes two matrices as parameters and a float between 0 and 1 to get an 
     //interpolated rotationmatrix between the two matrices
@@ -103,30 +109,34 @@ public static class Math
             return RotationMatrixFromQuaternion(qA);
         }
         
-        qA.w = -qA.w;
-
-        //Makes sure it takes shortest path around rotation axis
-        float dot = QuatDot(qA, qB);
-        if (dot < 0)
+        //*Sometimes* Makes sure it takes shortest path around rotation axis
+        float cosAngle = QuatDot(qA, qB);
+        if (cosAngle < 0)
+        {
             qB = new Quaternion(-qB.x, -qB.y, -qB.z, -qB.w);
+            cosAngle = -cosAngle;
+        }
         
         //Stops divide by zero error. 
-        if (dot < -0.9999)
+        if (cosAngle > 0.9999f)
             return Matrix4x4.identity;
         
-        Quaternion qC = qB * qA;
-        qA.w = -qA.w;
-        
-        float angle = Mathf.Acos(qC.w);
-        float newAngle = angle * time;
-        qC.w = Mathf.Cos(newAngle);
-        float mult = Mathf.Sin(newAngle) / Mathf.Sin(angle);
+        float sinAngle = Mathf.Sqrt(1.0f - cosAngle * cosAngle);
 
-        qC.x *= mult;
-        qC.y *= mult;
-        qC.z *= mult;
-        qC *= qA;
-        
-        return RotationMatrixFromQuaternion(qC);
+        float angle = Mathf.Atan2(sinAngle, cosAngle);
+
+        //Helps us only make the division once
+        float oneOverSinAngle = 1 / sinAngle;
+
+        //Gets interpolation values
+        float t0 = Mathf.Sin((1 - time) * angle) * oneOverSinAngle;
+        float t1 = Mathf.Sin(angle * time) * oneOverSinAngle;
+
+        Quaternion interQuat = new Quaternion(qA.x * t0 + qB.x * t1,
+            qA.y * t0 + qB.y * t1,
+            qA.z * t0 + qB.z * t1,
+            qA.w * t0 + qB.w * t1);
+
+        return RotationMatrixFromQuaternion(interQuat);
     }
 }

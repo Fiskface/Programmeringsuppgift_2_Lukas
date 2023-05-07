@@ -29,9 +29,6 @@ public class Example : MonoBehaviour
     [NonSerialized] public Vector4 vectorBC = new Vector4(-0.5f, 0.5f, 0.5f, 1);
     [NonSerialized] public Vector4 vectorABC = new Vector4(0.5f, 0.5f, 0.5f, 1);
 
-    [NonSerialized] public Quaternion aRotation = Quaternion.identity;
-    [NonSerialized] public Quaternion bRotation = Quaternion.identity;
-
     private Matrix4x4 CTranslate = Matrix4x4.identity;
     private Matrix4x4 CScale = Matrix4x4.identity;
     private Matrix4x4 CRotate = Matrix4x4.identity;
@@ -43,9 +40,6 @@ public class Example : MonoBehaviour
 
     void Update()
     {
-        aRotation = Math.QuatFromMatrix(A);
-        bRotation = Math.QuatFromMatrix(B);
-        
         if (ShowTranslation)
         {
             Vector4 posInter = (1.0f - Time) * Math.GetColumnFromMatrix(A, 3) + Time * Math.GetColumnFromMatrix(B, 3);
@@ -92,11 +86,9 @@ public class Example : MonoBehaviour
         
         using (vectors.Begin())
         {
-
             DrawCube(A);
             DrawCube(B);
             DrawCube(C);
-
 
             void DrawCube(Matrix4x4 mat)
             {
@@ -130,44 +122,6 @@ public class Example : MonoBehaviour
 [CustomEditor(typeof(Example))]
 public class DemoEditor : Editor
 {
-    private void OnSceneGUI()
-    {
-        var demo = target as Example;
-        if (!demo) return;
-
-        EditorGUI.BeginChangeCheck();
-        
-        var aPos = Math.GetColumnFromMatrix(demo.A, 3);
-        var bPos = Math.GetColumnFromMatrix(demo.B, 3);
-        
-        var newTargetPosA = aPos;
-        var newTargetPosB = bPos;
-        
-        if (Tools.current == Tool.Move)
-        {
-            newTargetPosA = Handles.PositionHandle(aPos, demo.aRotation);
-            newTargetPosB = Handles.PositionHandle(bPos, demo.bRotation);
-        }
-
-        if (EditorGUI.EndChangeCheck())
-        {
-            Undo.RecordObject(demo, "Moved target");
-            var copyA = demo.A;
-            copyA.m03 = newTargetPosA.x;
-            copyA.m13 = newTargetPosA.y;
-            copyA.m23 = newTargetPosA.z;
-            demo.A = copyA;
-            
-            var copyB = demo.B;
-            copyB.m03 = newTargetPosB.x;
-            copyB.m13 = newTargetPosB.y;
-            copyB.m23 = newTargetPosB.z;
-            demo.B = copyB;
-            
-            EditorUtility.SetDirty(demo);
-        }
-    }
-
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
