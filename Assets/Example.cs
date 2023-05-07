@@ -8,13 +8,11 @@ using Vectors;
 [RequireComponent(typeof(VectorRenderer))]
 public class Example : MonoBehaviour
 {
-
     [NonSerialized] private VectorRenderer vectors;
 
     public bool ShowTranslation = true;
     public bool ShowScale = true;
     public bool ShowRotation = true;
-    public bool InputWithHandles = false;
 
     [Range(0, 1)] public float Time = 0.0f;
 
@@ -31,8 +29,8 @@ public class Example : MonoBehaviour
     [NonSerialized] public Vector4 vectorBC = new Vector4(-0.5f, 0.5f, 0.5f, 1);
     [NonSerialized] public Vector4 vectorABC = new Vector4(0.5f, 0.5f, 0.5f, 1);
 
-    public Quaternion aRotation = Quaternion.identity;
-    public Quaternion bRotation = Quaternion.identity;
+    [NonSerialized] public Quaternion aRotation = Quaternion.identity;
+    [NonSerialized] public Quaternion bRotation = Quaternion.identity;
 
     private Matrix4x4 CTranslate = Matrix4x4.identity;
     private Matrix4x4 CScale = Matrix4x4.identity;
@@ -45,23 +43,26 @@ public class Example : MonoBehaviour
 
     void Update()
     {
+        aRotation = Math.QuatFromMatrix(A);
+        bRotation = Math.QuatFromMatrix(B);
+        
         if (ShowTranslation)
         {
-            Vector4 posInter = (1.0f - Time) * Math.getColumnFromMatrix(A, 3) + Time * Math.getColumnFromMatrix(B, 3);
-            CTranslate = Math.setColumnInMatrix(Matrix4x4.identity, posInter, 3);
+            Vector4 posInter = (1.0f - Time) * Math.GetColumnFromMatrix(A, 3) + Time * Math.GetColumnFromMatrix(B, 3);
+            CTranslate = Math.SetColumnInMatrix(Matrix4x4.identity, posInter, 3);
         }
         
         if (ShowScale)
         {
             CScale = Matrix4x4.identity;
 
-            float ScaleAx = Math.GetMagnitude(Math.getColumnFromMatrix(A, 0));
-            float ScaleAy = Math.GetMagnitude(Math.getColumnFromMatrix(A, 1));
-            float ScaleAz = Math.GetMagnitude(Math.getColumnFromMatrix(A, 2));
+            float ScaleAx = Math.GetMagnitude(Math.GetColumnFromMatrix(A, 0));
+            float ScaleAy = Math.GetMagnitude(Math.GetColumnFromMatrix(A, 1));
+            float ScaleAz = Math.GetMagnitude(Math.GetColumnFromMatrix(A, 2));
 
-            float ScaleBx = Math.GetMagnitude(Math.getColumnFromMatrix(B, 0));
-            float ScaleBy = Math.GetMagnitude(Math.getColumnFromMatrix(B, 1));
-            float ScaleBz = Math.GetMagnitude(Math.getColumnFromMatrix(B, 2));
+            float ScaleBx = Math.GetMagnitude(Math.GetColumnFromMatrix(B, 0));
+            float ScaleBy = Math.GetMagnitude(Math.GetColumnFromMatrix(B, 1));
+            float ScaleBz = Math.GetMagnitude(Math.GetColumnFromMatrix(B, 2));
 
             //Scalematrisen
             CScale.m00 = (1.0f - Time) * ScaleAx + Time * ScaleBx;
@@ -71,11 +72,23 @@ public class Example : MonoBehaviour
         
         if (ShowRotation)
         {
-            CRotate = Math.CalculateRotationMatrix(A, B, Time);
+            CRotate = Math.CalculateInterpolatedRotationMatrix(A, B, Time);
         }
         
         C = CTranslate * CRotate * CScale;
 
+        //Gets rid of incredibly small numbers when Time is 1 to make it easier to read.
+        if (Time == 1)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if (Mathf.Abs(C[i]) < 0.0001)
+                {
+                    C[i] = 0;
+                }
+            }
+        }
+        
         
         using (vectors.Begin())
         {
@@ -114,7 +127,6 @@ public class Example : MonoBehaviour
 
 
 
-
 [CustomEditor(typeof(Example))]
 public class DemoEditor : Editor
 {
@@ -125,29 +137,16 @@ public class DemoEditor : Editor
 
         EditorGUI.BeginChangeCheck();
         
-        var aPos = Math.getColumnFromMatrix(demo.A, 3);
-        var bPos = Math.getColumnFromMatrix(demo.B, 3);
+        var aPos = Math.GetColumnFromMatrix(demo.A, 3);
+        var bPos = Math.GetColumnFromMatrix(demo.B, 3);
+        
         var newTargetPosA = aPos;
         var newTargetPosB = bPos;
-        var newTargetRotA = demo.aRotation;
-        var newTargetRotB = demo.bRotation;
-        var newTargetScaleA = new Vector3(demo.A.m00,demo.A.m11,demo.A.m22);
-        var newTargetScaleB = new Vector3(demo.B.m00, demo.B.m11, demo.B.m22);
-
+        
         if (Tools.current == Tool.Move)
         {
             newTargetPosA = Handles.PositionHandle(aPos, demo.aRotation);
             newTargetPosB = Handles.PositionHandle(bPos, demo.bRotation);
-        }
-        else if (Tools.current == Tool.Rotate)
-        {
-            newTargetRotA = Handles.RotationHandle(demo.aRotation, aPos);
-            newTargetRotB = Handles.RotationHandle(demo.bRotation, bPos);
-        }
-        else if (Tools.current == Tool.Scale)
-        {
-            newTargetScaleA = Handles.ScaleHandle(newTargetScaleA, aPos, demo.aRotation);
-            newTargetScaleB = Handles.ScaleHandle(newTargetScaleB, bPos, demo.bRotation);
         }
 
         if (EditorGUI.EndChangeCheck())
@@ -164,17 +163,7 @@ public class DemoEditor : Editor
             copyB.m13 = newTargetPosB.y;
             copyB.m23 = newTargetPosB.z;
             demo.B = copyB;
-
-            demo.aRotation = newTargetRotA;
-            demo.bRotation = newTargetRotB;
             
-            demo.B.m00 = newTargetScaleB.x;
-            demo.B.m11 = newTargetScaleB.y;
-            demo.B.m22 = newTargetScaleB.z;
-            
-            demo.A.m00 = newTargetScaleA.x;
-            demo.A.m11 = newTargetScaleA.y;
-            demo.A.m22 = newTargetScaleA.z;
             EditorUtility.SetDirty(demo);
         }
     }
